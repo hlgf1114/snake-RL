@@ -39,7 +39,7 @@ def main():
             if total_step % 2000 == 0:
                 network.model_save('snake')
 
-            if total_step % 100 == 0:
+            if total_step % 5 == 0:
                 network.copy_network()
             
             # 사과를 먹었으므로 스텝 초기화

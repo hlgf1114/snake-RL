@@ -3,6 +3,7 @@ from keras.optimizers import SGD
 from keras.layers import Dense, Flatten, Conv2D
 import numpy as np
 import random
+import tensorflow as tf
 
 import os
 
@@ -12,7 +13,7 @@ class Agent:
     def __init__(self):
 
         self.epsilon = 1
-        self.final_epsilon = 0.1
+        self.final_epsilon = 0
         self.learning_rate = 0.1
         self.gamma = 0.9
 
@@ -37,6 +38,10 @@ class Agent:
 
         # 신경망 생성
 
+    def custom_loss_function(self, y_actual, y_predicted):
+        loss = tf.reduce_mean(tf.square(y_predicted - y_actual))
+        return loss
+
     def make_network(self):
         self.model = Sequential()
         self.model.add(Conv2D(16, (8, 8), padding='same', activation='relu', input_shape=(80, 80, 1)))
@@ -47,7 +52,7 @@ class Agent:
         self.model.add(Dense(4))
         print(self.model.summary())
 
-        self.model.compile(optimizer=SGD(lr=0.01), loss='mean_squared_error', metrics=['mse'])
+        self.model.compile(optimizer='adam', loss=self.custom_loss_function, metrics=['mse'])
         return self.model
 
     def copy_network(self):
@@ -84,9 +89,9 @@ class Agent:
 
         # 게임이 종료됐을 때
         if env.done == True:
-            q_values[np.argmax(action_backup)] = 1
+            q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
-            self.main_network.fit(x, y, epochs=10, verbose=0)
+            self.main_network.fit(x, y, verbose=0)
         else:
             next_x = np.array([new_state], dtype=np.float32).astype(np.float32)
             next_q_values = self.target_network.predict(next_x)
@@ -95,5 +100,5 @@ class Agent:
 
             # 생성된 오차 수정 데이터로 학습
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
-            self.main_network.fit(x, y, epochs=10, verbose=0)
+            self.main_network.fit(x, y, verbose=0)
 
