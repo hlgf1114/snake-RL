@@ -12,8 +12,9 @@ class Snake:
 
     def draw(self, screen):
         # 뱀 그리기
-        for position in self.positions:
-            Util.draw_block(screen, self.color, position)
+        Util.draw_block(screen, colors.BLUE, self.positions[0])
+        for i in range(len(self.positions) - 1):
+            Util.draw_block(screen, self.color, self.positions[i + 1])
 
     def crawl(self):
         # 뱀이 현재 방향으로 한 칸 기어간다.

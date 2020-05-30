@@ -41,12 +41,9 @@ class Agent:
         self.model = Sequential()
         self.model.add(Conv2D(16, (8, 8), padding='same', activation='relu', input_shape=(80, 80, 1)))
         self.model.add(Conv2D(32, (4, 4), padding='same', activation='relu'))
-        self.model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
         self.model.add(Flatten())
         self.model.add(Dense(128, activation='softmax'))
-        self.model.add(Dense(64, activation='softmax'))
-        self.model.add(Dense(32, activation='softmax'))
-        self.model.add(Dense(4))
+        self.model.add(Dense(32, activation='softmax'))        self.model.add(Dense(4))
         print(self.model.summary())
 
         self.model.compile(optimizer=SGD(lr=0.01), loss='mean_squared_error', metrics=['mse'])
@@ -73,7 +70,7 @@ class Agent:
 
         # 엡실론 프로세스
         if self.epsilon > self.final_epsilon:
-            self.epsilon -= self.epsilon / 50000
+            self.epsilon -= self.epsilon / 10000
         else:
             self.epsilon = self.final_epsilon
 
