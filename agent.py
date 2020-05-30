@@ -12,7 +12,7 @@ class Agent:
 
     def __init__(self):
 
-        self.epsilon = 1
+        self.epsilon = 0.7
         self.final_epsilon = 0
         self.learning_rate = 0.1
         self.gamma = 0.9
@@ -48,11 +48,11 @@ class Agent:
         self.model.add(Conv2D(32, (4, 4), padding='same', activation='relu'))
         self.model.add(Flatten())
         self.model.add(Dense(128))
-        self.model.add(Dense(32))
+        self.model.add(Dense(32, activation='relu'))
         self.model.add(Dense(4))
         print(self.model.summary())
 
-        self.model.compile(optimizer='adam', loss=self.custom_loss_function, metrics=['mse'])
+        self.model.compile(optimizer='adam', loss=self.custom_loss_function)
         return self.model
 
     def copy_network(self):
@@ -89,7 +89,8 @@ class Agent:
 
         # 게임이 종료됐을 때
         if env.done == True:
-            q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
+            #q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
+            q_values[np.argmax(action_backup)] += reward
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
             self.main_network.fit(x, y, epochs=1, verbose=0)
         else:
