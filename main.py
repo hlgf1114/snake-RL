@@ -53,8 +53,10 @@ def main():
             total_reward += reward
             state = next_state
 
-            if total_step % 20 == 0:
-                print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))
-
+            #if total_step % 20 == 0:
+            #    print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))
+        print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward,
+                                                                                   network.epsilon))
+        episode += 1
 if __name__ == '__main__':
     main()

@@ -73,7 +73,7 @@ class Agent:
 
         # 엡실론 프로세스
         if self.epsilon > self.final_epsilon:
-            self.epsilon -= self.epsilon / 100000
+            self.epsilon -= self.epsilon / 50000
         else:
             self.epsilon = self.final_epsilon
 
