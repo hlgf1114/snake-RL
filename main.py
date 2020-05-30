@@ -10,12 +10,8 @@ def main():
 
     env = game.Environment()
     network = agent.Agent()
-    
-    # 게임 초기화
-    state = env.init()
-    state = img.img_resize(state)
 
-    max_step = 1000001
+    max_step = 100
     total_episodes = 50000
     episode = 0
     total_reward = 0
@@ -25,8 +21,10 @@ def main():
     loose_count = 0
 
     while episode < total_episodes:
-        step = 0
-        while step <= max_step:
+        # 게임 초기화
+        state = env.init()
+        state = img.img_resize(state)
+        while True:
 
             # 행동 선택
             action = network.select_action(state)
@@ -38,18 +36,25 @@ def main():
             # 트레이닝
             network.train_dqn(state, action, next_state, env, reward)
 
-            if total_step % 10000 == 0:
+            if total_step % 2000 == 0:
                 network.model_save('snake')
 
             if total_step % 100 == 0:
                 network.copy_network()
+            
+            # 사과를 먹었으므로 스텝 초기화
+            if reward == env.REWARD_GET_APPLE:
+                step = 0
 
-            env.update()
+            if done:
+                break
 
-            step += 1
             total_step += 1
             total_reward += reward
             state = next_state
+
+            if total_step % 20 == 0:
+                print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))
 
 if __name__ == '__main__':
     main()

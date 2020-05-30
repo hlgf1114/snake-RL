@@ -35,12 +35,16 @@ class Environment:
         self.REWARD_GET_APPLE = 1
         self.REWARD_COLLIDE = -1
 
+        self.step = 0
+        self.max_step = 100
+
         self.reward = self.REWARD_NOTHING
         self.done = False
 
     def init(self):
         self.reward = self.REWARD_NOTHING
         self.done = False
+        self.step = 0
         # 게임 초기화
         self.game_board.initialization()
         return pygame.surfarray.array3d(pygame.display.get_surface())
@@ -49,6 +53,12 @@ class Environment:
         pygame.display.update()
 
     def move(self, action):
+
+        if self.step > self.max_step:
+            self.state = pygame.surfarray.array3d(pygame.display.get_surface())
+            self.done = True
+            self.reward = self.REWARD_COLLIDE
+            return self.state, self.reward, self.done
 
         #if self.TURN_INTERVAL < datetime.now() - self.last_turn_time:
         #   return self.state, self.reward
@@ -66,7 +76,7 @@ class Environment:
         # 시간이 지나면 움직임
         #if self.TURN_INTERVAL < datetime.now() - self.last_turn_time:
 
-        self.done = self.game_board.process_turn()
+        self.done, self.reward = self.game_board.process_turn()
         self.last_turn_time = datetime.now()
 
         Util.draw_background(self.screen)
@@ -74,5 +84,5 @@ class Environment:
         self.update()
         # 반환값 주기
         self.state = pygame.surfarray.array3d(pygame.display.get_surface())
-
+        self.step += 1
         return self.state, self.reward, self.done

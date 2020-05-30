@@ -14,7 +14,9 @@ class GameBoard:
     def __init__(self):
         self.snake = Snake.Snake()
         self.apple = Apple.Apple()
-
+        self.REWARD_NOTHING = -0.1
+        self.REWARD_GET_APPLE = 1
+        self.REWARD_COLLIDE = -1
         self.wall = Util.SCREEN_HEIGHT / Util.BLOCK_SIZE
 
     def initialization(self):
@@ -37,6 +39,7 @@ class GameBoard:
 
     def process_turn(self):
 
+        reward = self.REWARD_NOTHING
         done = False
 
         # 뱀 기어가기
@@ -46,17 +49,21 @@ class GameBoard:
         if self.snake.positions[0] in self.snake.positions[1:]:
             # 뱀 충돌 예외
             done = True
-            return done
+            reward = self.REWARD_COLLIDE
+            return done, reward
 
         # 뱀이 밖으로 나갔을 경우
         if self.snake.positions[0][0] >= self.wall or self.snake.positions[0][1] >= self.wall or \
                 self.snake.positions[0][0] < 0 or self.snake.positions[0][1] < 0:
             done = True
-            return done
+            reward = self.REWARD_COLLIDE
+            return done, reward
 
         # 뱀의 머리와 사과가 닿았다면
         if self.snake.positions[0] == self.apple.position:
             self.snake.grow()
             self.put_new_apple()
+            reward = self.REWARD_GET_APPLE
+            return done, reward
 
-        return done
+        return done, reward

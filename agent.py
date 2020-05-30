@@ -43,9 +43,9 @@ class Agent:
         self.model.add(Conv2D(32, (4, 4), padding='same', activation='relu'))
         self.model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
         self.model.add(Flatten())
-        self.model.add(Dense(128, activation='tanh'))
-        self.model.add(Dense(64, activation='tanh'))
-        self.model.add(Dense(32, activation='tanh'))
+        self.model.add(Dense(128, activation='softmax'))
+        self.model.add(Dense(64, activation='softmax'))
+        self.model.add(Dense(32, activation='softmax'))
         self.model.add(Dense(4))
         print(self.model.summary())
 
@@ -66,6 +66,7 @@ class Agent:
             action[action_index] = 1
         # 예측
         else:
+            state = np.array([state], dtype=np.float32).astype(np.float32)
             q_values = self.main_network.predict(state)
             action_index = np.argmax(q_values)
             action[action_index] = 1
@@ -82,12 +83,11 @@ class Agent:
 
         x = np.array([state_backup], dtype=np.float32).astype(np.float32)
         q_values = self.main_network.predict(x)[0]
-        print(q_values)
 
         # 게임이 종료됐을 때
         if env.done == True:
             q_values[np.argmax(action_backup)] = 1
-            y = q_values
+            y = np.array([q_values], dtype=np.float32).astype(np.float32)
             self.main_network.fit(x, y, epochs=10, verbose=0)
         else:
             next_x = np.array([new_state], dtype=np.float32).astype(np.float32)
