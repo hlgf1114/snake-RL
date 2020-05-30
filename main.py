@@ -36,22 +36,24 @@ def main():
             # 트레이닝
             network.train_dqn(state, action, next_state, env, reward)
 
+
             if total_step % 2000 == 0:
                 network.model_save('snake')
 
             if total_step % 5 == 0:
                 network.copy_network()
-            
+
             # 사과를 먹었으므로 스텝 초기화
             if reward == env.REWARD_GET_APPLE:
                 step = 0
 
-            if done:
-                break
-
             total_step += 1
             total_reward += reward
             state = next_state
+            if done:
+                break
+
+
 
             #if total_step % 20 == 0:
             #    print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))

@@ -47,8 +47,8 @@ class Agent:
         self.model.add(Conv2D(16, (8, 8), padding='same', activation='relu', input_shape=(80, 80, 1)))
         self.model.add(Conv2D(32, (4, 4), padding='same', activation='relu'))
         self.model.add(Flatten())
-        self.model.add(Dense(128, activation='softmax'))
-        self.model.add(Dense(32, activation='softmax'))
+        self.model.add(Dense(128))
+        self.model.add(Dense(32))
         self.model.add(Dense(4))
         print(self.model.summary())
 
@@ -76,7 +76,7 @@ class Agent:
 
         # 엡실론 프로세스
         if self.epsilon > self.final_epsilon:
-            self.epsilon -= self.epsilon / 10000
+            self.epsilon -= self.epsilon / 5000
         else:
             self.epsilon = self.final_epsilon
 
@@ -91,7 +91,7 @@ class Agent:
         if env.done == True:
             q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
-            self.main_network.fit(x, y, verbose=0)
+            self.main_network.fit(x, y, epochs=1, verbose=0)
         else:
             next_x = np.array([new_state], dtype=np.float32).astype(np.float32)
             next_q_values = self.target_network.predict(next_x)
@@ -100,5 +100,5 @@ class Agent:
 
             # 생성된 오차 수정 데이터로 학습
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
-            self.main_network.fit(x, y, verbose=0)
+            self.main_network.fit(x, y, epochs=1, verbose=0)
 

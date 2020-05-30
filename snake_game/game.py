@@ -32,8 +32,8 @@ class Environment:
         self.game_board = GameBoard.GameBoard()
         # 보상
         self.REWARD_NOTHING = 0
-        self.REWARD_GET_APPLE = 1
-        self.REWARD_COLLIDE = -1
+        self.REWARD_GET_APPLE = 3
+        self.REWARD_COLLIDE = -10
 
         self.step = 0
         self.max_step = 1000
