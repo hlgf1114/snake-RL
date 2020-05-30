@@ -43,7 +43,8 @@ class Agent:
         self.model.add(Conv2D(32, (4, 4), padding='same', activation='relu'))
         self.model.add(Flatten())
         self.model.add(Dense(128, activation='softmax'))
-        self.model.add(Dense(32, activation='softmax'))        self.model.add(Dense(4))
+        self.model.add(Dense(32, activation='softmax'))
+        self.model.add(Dense(4))
         print(self.model.summary())
 
         self.model.compile(optimizer=SGD(lr=0.01), loss='mean_squared_error', metrics=['mse'])
