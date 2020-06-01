@@ -13,8 +13,6 @@ def main():
     env = game.Environment()
     network = agent.Agent()
     stack = stacking.Stack()
-
-    max_step = 100
     total_episodes = 50000
     episode = 0
     total_reward = 0
@@ -24,6 +22,8 @@ def main():
     loose_count = 0
 
     init_num = 0
+
+    network.model_load('snake')
 
     while episode < total_episodes:
         # 게임 초기화
@@ -52,8 +52,6 @@ def main():
             if total_step % 2000 == 0:
                 network.model_save('snake')
 
-            if total_step % 5 == 0:
-                network.copy_network()
 
             init_num += 1
             total_step += 1
@@ -62,10 +60,9 @@ def main():
             if done:
                 break
 
-
-
-            #if total_step % 20 == 0:
-            #    print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))
+        network.copy_network()
+        #if total_step % 20 == 0:
+        #    print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))
         print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward,
                                                                                    network.epsilon))
         episode += 1
