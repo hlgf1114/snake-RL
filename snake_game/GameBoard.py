@@ -14,8 +14,8 @@ class GameBoard:
     def __init__(self):
         self.snake = Snake.Snake()
         self.apple = Apple.Apple()
-        self.REWARD_NOTHING = 0
-        self.REWARD_GET_APPLE = 3
+        self.REWARD_NOTHING = -1
+        self.REWARD_GET_APPLE = 5
         self.REWARD_COLLIDE = -10
         self.wall = Util.SCREEN_HEIGHT / Util.BLOCK_SIZE
 

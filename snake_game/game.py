@@ -31,8 +31,8 @@ class Environment:
         self.TURN_INTERVAL = timedelta(seconds=1)  # ❶ 게임 진행 간격을 0.3초로 정의한다
         self.game_board = GameBoard.GameBoard()
         # 보상
-        self.REWARD_NOTHING = 0
-        self.REWARD_GET_APPLE = 3
+        self.REWARD_NOTHING = -1
+        self.REWARD_GET_APPLE = 5
         self.REWARD_COLLIDE = -10
 
         self.step = 0

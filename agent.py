@@ -12,7 +12,7 @@ class Agent:
 
     def __init__(self):
 
-        self.epsilon = 0
+        self.epsilon = 0.8
         self.final_epsilon = 0
         self.learning_rate = 0.1
         self.gamma = 0.9
@@ -85,11 +85,9 @@ class Agent:
 
         x = np.array([state_backup], dtype=np.float32).astype(np.float32)
         q_values = self.main_network.predict(x)[0]
-        print(q_values)
 
         # 게임이 종료됐을 때
         if done == True:
-            print("끝 학습")
             #q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
             q_values[np.argmax(action_backup)] += reward
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
