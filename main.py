@@ -5,9 +5,6 @@ import pygame
 import time
 import img
 import numpy as np
-
-from matplotlib import pyplot as plt
-
 def main():
 
     env = game.Environment()
