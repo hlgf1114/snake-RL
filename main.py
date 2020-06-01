@@ -49,18 +49,19 @@ def main():
             # 트레이닝
             network.train_dqn(stacked_state, action, next_stacked_state, done, reward)
 
-            if total_step % 2000 == 0:
-                network.model_save('snake')
-
-
             init_num += 1
             total_step += 1
             total_reward += reward
             stacked_state = next_stacked_state
             if done:
                 break
+
         if episode % 50 == 0:
             network.copy_network()
+
+        if total_step % 2000 == 0:
+            network.model_save('snake')
+
         #if total_step % 20 == 0:
         #    print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))
         print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward,
