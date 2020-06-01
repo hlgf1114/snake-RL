@@ -6,6 +6,8 @@ import time
 import img
 import numpy as np
 
+from matplotlib import pyplot as plt
+
 def main():
 
     env = game.Environment()
@@ -24,6 +26,7 @@ def main():
         # 게임 초기화
         state = env.init()
         state = img.img_resize(state)
+
         while True:
 
             # 행동 선택
