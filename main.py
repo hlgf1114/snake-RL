@@ -4,6 +4,7 @@ import agent
 import stacking
 import pygame
 import random
+import matplotlib.pyplot as plt
 import time
 import img
 import numpy as np
@@ -29,13 +30,14 @@ def main():
         state = env.init()
         state = img.img_resize(state)
         # 스택 넣어줌
+        stack.erase()
         for i in range(stack.stackingNum * stack.stakingSkip):
             stack.state_set.append(state)
 
+        stacked_state = stack.skip_and_stack_frame(state)
+
         while True:
 
-
-            stacked_state = stack.skip_and_stack_frame(state)
             # 행동 선택
             action = network.select_action(stacked_state)
 

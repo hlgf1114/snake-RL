@@ -47,6 +47,7 @@ class Environment:
         self.step = 0
         # 게임 초기화
         self.game_board.initialization()
+        pygame.display.update()
         return pygame.surfarray.array3d(pygame.display.get_surface())
 
     def update(self):

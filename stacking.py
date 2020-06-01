@@ -8,6 +8,9 @@ class Stack:
         self.stackingNum = 4
         self.stakingSkip = 1
 
+    def erase(self):
+        self.state_set.clear()
+
     def skip_and_stack_frame(self, state):
 
         self.state_set.append(state)
@@ -16,7 +19,7 @@ class Stack:
 
         for stack_frame in range(self.stackingNum):
             stacked_state[:,:,stack_frame] = self.state_set[-1 - (self.stakingSkip * stack_frame)]
-        del self.state_set[0]
+        self.state_set.pop(0)
 
         return stacked_state
 
