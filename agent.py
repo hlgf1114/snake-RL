@@ -85,7 +85,6 @@ class Agent:
 
         x = np.array([state_backup], dtype=np.float32).astype(np.float32)
         q_values = self.main_network.predict(x)[0]
-        print(q_values)
 
         # 게임이 종료됐을 때
         if done == True:

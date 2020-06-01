@@ -59,8 +59,8 @@ def main():
             stacked_state = next_stacked_state
             if done:
                 break
-
-        network.copy_network()
+        if episode % 500 == 0:
+            network.copy_network()
         #if total_step % 20 == 0:
         #    print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward, network.epsilon))
         print("episode = {} total_step = {} total_reward = {} epsilon = {}".format(episode, total_step, total_reward,
