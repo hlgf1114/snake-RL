@@ -44,7 +44,7 @@ class Agent:
 
     def make_network(self):
         self.model = Sequential()
-        self.model.add(Conv2D(16, (1, 1), padding='same', activation='relu', input_shape=(20, 20, 1)))
+        self.model.add(Conv2D(16, (1, 1), padding='same', activation='relu', input_shape=(20, 20, 4)))
         self.model.add(Flatten())
         self.model.add(Dense(128, activation='relu'))
         self.model.add(Dense(64, activation='relu'))
@@ -75,7 +75,7 @@ class Agent:
 
         # 엡실론 프로세스
         if self.epsilon > 0.1:
-            self.epsilon -= self.epsilon / 5000
+            self.epsilon -= self.epsilon / 50000
         else:
             self.epsilon = self.final_epsilon
 
