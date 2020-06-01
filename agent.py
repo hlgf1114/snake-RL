@@ -12,7 +12,7 @@ class Agent:
 
     def __init__(self):
 
-        self.epsilon = 0.7
+        self.epsilon = 0
         self.final_epsilon = 0
         self.learning_rate = 0.1
         self.gamma = 0.9
@@ -44,11 +44,10 @@ class Agent:
 
     def make_network(self):
         self.model = Sequential()
-        self.model.add(Conv2D(16, (2, 2), padding='same', activation='relu', input_shape=(20, 20, 1)))
-        self.model.add(Conv2D(32, (1, 1), padding='same', activation='relu'))
+        self.model.add(Conv2D(16, (1, 1), padding='same', activation='relu', input_shape=(20, 20, 1)))
         self.model.add(Flatten())
-        self.model.add(Dense(128))
-        self.model.add(Dense(32, activation='relu'))
+        self.model.add(Dense(128, activation='relu'))
+        self.model.add(Dense(64, activation='relu'))
         self.model.add(Dense(4))
         print(self.model.summary())
 
@@ -75,22 +74,24 @@ class Agent:
             action[action_index] = 1
 
         # 엡실론 프로세스
-        if self.epsilon > self.final_epsilon:
+        if self.epsilon > 0.1:
             self.epsilon -= self.epsilon / 5000
         else:
             self.epsilon = self.final_epsilon
 
         return action
 
-    def train_dqn(self, state_backup, action_backup, new_state, env, reward):
+    def train_dqn(self, state_backup, action_backup, new_state, done, reward):
 
         x = np.array([state_backup], dtype=np.float32).astype(np.float32)
         q_values = self.main_network.predict(x)[0]
+        print(q_values)
 
         # 게임이 종료됐을 때
-        if env.done == True:
+        if done == True:
+            print("끝 학습")
             #q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
-            q_values[np.argmax(action_backup)] = reward
+            q_values[np.argmax(action_backup)] += reward
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
             self.main_network.fit(x, y, epochs=1, verbose=0)
         else:

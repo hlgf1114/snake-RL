@@ -25,7 +25,6 @@ def main():
         state = img.img_resize(state)
 
         while True:
-
             # 행동 선택
             action = network.select_action(state)
 
@@ -34,18 +33,13 @@ def main():
             next_state = img.img_resize(next_state)
 
             # 트레이닝
-            network.train_dqn(state, action, next_state, env, reward)
-
+            network.train_dqn(state, action, next_state, done, reward)
 
             if total_step % 2000 == 0:
                 network.model_save('snake')
 
             if total_step % 5 == 0:
                 network.copy_network()
-
-            # 사과를 먹었으므로 스텝 초기화
-            if reward == env.REWARD_GET_APPLE:
-                step = 0
 
             total_step += 1
             total_reward += reward
