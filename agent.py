@@ -90,7 +90,7 @@ class Agent:
         # 게임이 종료됐을 때
         if env.done == True:
             #q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
-            q_values[np.argmax(action_backup)] += reward
+            q_values[np.argmax(action_backup)] = reward
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
             self.main_network.fit(x, y, epochs=1, verbose=0)
         else:
