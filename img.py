@@ -1,7 +1,5 @@
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
-
 def img_resize(state):
 
     state_out = cv2.resize(state, (20, 20))
