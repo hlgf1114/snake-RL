@@ -36,7 +36,7 @@ class Environment:
         self.REWARD_COLLIDE = -10
 
         self.step = 0
-        self.max_step = 1000
+        self.max_step = 500
 
         self.reward = self.REWARD_NOTHING
         self.done = False
