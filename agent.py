@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.optimizers import SGD
 from keras.layers import Dense, Flatten, Conv2D
+from keras import backend as K
 import numpy as np
 import random
 import tensorflow as tf
@@ -39,15 +40,18 @@ class Agent:
         # 신경망 생성
 
     def custom_loss_function(self, y_actual, y_predicted):
-        loss = tf.reduce_mean(tf.square(y_predicted - y_actual))
+        #loss = tf.square(y_predicted - y_actual)
+        loss = (y_predicted - y_actual)**2
         return loss
 
     def make_network(self):
         self.model = Sequential()
-        self.model.add(Conv2D(16, (1, 1), padding='same', activation='relu', input_shape=(20, 20, 4)))
+        #self.model.add(Conv2D(16, (1, 1), padding='same', activation='relu', input_shape=(1, 4, 11)))
+        #self.model.add(Flatten())
+        self.model.add(Dense(256, input_shape=(4,83)))
         self.model.add(Flatten())
-        self.model.add(Dense(128, activation='relu'))
-        self.model.add(Dense(64, activation='relu'))
+        self.model.add(Dense(128, activation='tanh'))
+        self.model.add(Dense(64, activation='tanh'))
         self.model.add(Dense(4))
         print(self.model.summary())
 
@@ -89,16 +93,18 @@ class Agent:
         # 게임이 종료됐을 때
         if done == True:
             #q_values[np.argmax(action_backup)] += self.learning_rate * (reward - q_values[np.argmax(action_backup)])
-            q_values[np.argmax(action_backup)] += reward
+            q_values[np.argmax(action_backup)] = reward
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
             self.main_network.fit(x, y, epochs=1, verbose=0)
         else:
             next_x = np.array([new_state], dtype=np.float32).astype(np.float32)
             next_q_values = self.target_network.predict(next_x)
             maxQ = np.max(next_q_values)
-            q_values[np.argmax(action_backup)] += self.learning_rate * (reward + self.gamma * maxQ - q_values[np.argmax(action_backup)])
+            #q_values[np.argmax(action_backup)] += self.learning_rate * (reward + self.gamma * maxQ - q_values[np.argmax(action_backup)])
+            q_values[np.argmax(action_backup)] = reward + self.gamma * maxQ
 
             # 생성된 오차 수정 데이터로 학습
             y = np.array([q_values], dtype=np.float32).astype(np.float32)
-            self.main_network.fit(x, y, epochs=1, verbose=0)
+            history = self.main_network.fit(x, y, epochs=1, verbose=0)
+            print(history.history['loss'])
 

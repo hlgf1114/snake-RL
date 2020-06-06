@@ -1,23 +1,26 @@
 from snake_game import Apple
 from snake_game import Snake
-from snake_game import Collision
 from snake_game import Util
+
+import numpy as np
 
 import random
 
 class GameBoard:
     # 게임판 너비
-    width = 20
+    width = 40
     # 게임판 높이
-    height = 20
+    height = 40
 
     def __init__(self):
         self.snake = Snake.Snake()
         self.apple = Apple.Apple()
         self.REWARD_NOTHING = -1
-        self.REWARD_GET_APPLE = 5
-        self.REWARD_COLLIDE = -10
+        self.REWARD_GET_APPLE = 30
+        self.REWARD_COLLIDE = -100
         self.wall = Util.SCREEN_HEIGHT / Util.BLOCK_SIZE
+
+        self.padding = 9
 
     def initialization(self):
         del self.snake
@@ -31,7 +34,7 @@ class GameBoard:
         self.snake.draw(screen)
 
     def put_new_apple(self):
-        self.apple = Apple.Apple((random.randint(0, 19), random.randint(0, 19)))
+        self.apple = Apple.Apple((random.randint(0, self.width - 1), random.randint(0, self.height - 1)))
         for position in self.snake.positions:
             if self.apple.position == position:
                 self.put_new_apple()
@@ -67,3 +70,19 @@ class GameBoard:
             return done, reward
 
         return done, reward
+
+    def show(self):
+
+        # 게임판은 20X20 짜리
+        display = np.zeros((self.width, self.height))
+
+        for i in range(self.height):
+            for j in range(self.width):
+                if (i, j) in self.snake.positions:
+                    display[i,j] = 1;
+                elif (i, j) == self.apple.position:
+                    display[i,j] = 0;
+
+        display = np.pad(display, ((self.padding,self.padding), (self.padding,self.padding)), 'constant',constant_values=1)
+
+        return display

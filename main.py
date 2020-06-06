@@ -6,6 +6,7 @@ import pygame
 import random
 import matplotlib.pyplot as plt
 import time
+import matplotlib.pyplot as plt
 import img
 import numpy as np
 def main():
@@ -18,17 +19,12 @@ def main():
     total_reward = 0
     total_step = 0
 
-    win_count = 0
-    loose_count = 0
-
     init_num = 0
-
-    network.model_load('snake')
 
     while episode < total_episodes:
         # 게임 초기화
         state = env.init()
-        state = img.img_resize(state)
+
         # 스택 넣어줌
         stack.erase()
         for i in range(stack.stackingNum * stack.stakingSkip):
@@ -43,7 +39,6 @@ def main():
 
             # 그에 맞는 다음 상태와 보상 및 끝
             next_state, reward, done = env.move(np.argmax(action))
-            next_state = img.img_resize(next_state)
             next_stacked_state = stack.skip_and_stack_frame(next_state)
 
             # 트레이닝

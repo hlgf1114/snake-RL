@@ -15,10 +15,10 @@ class Stack:
 
         self.state_set.append(state)
 
-        stacked_state = np.zeros((20, 20, self.stackingNum))
+        stacked_state = []
 
         for stack_frame in range(self.stackingNum):
-            stacked_state[:,:,stack_frame] = self.state_set[-1 - (self.stakingSkip * stack_frame)]
+            stacked_state.append(self.state_set[-1 - (self.stakingSkip * stack_frame)])
         self.state_set.pop(0)
 
         return stacked_state

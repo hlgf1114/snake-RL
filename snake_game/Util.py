@@ -4,7 +4,7 @@ from snake_game import colors
 
 SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 400
-BLOCK_SIZE = 20
+BLOCK_SIZE = 10
 
 def draw_block(screen, color, position):
     # position 위치에 color 색깔의 블록을 그린다.
